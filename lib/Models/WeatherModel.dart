@@ -1,5 +1,6 @@
 // ignore: file_names
 // ignore_for_file: file_names, duplicate_ignore
+import 'package:string_validator/string_validator.dart';
 
 import 'dart:core';
 
@@ -10,6 +11,8 @@ class WeatherModel {
   double? maxTemp;
   String? weatherStateName;
   String? cityName;
+  String? path;
+
   WeatherModel({
     required this.date,
     required this.avgTemp,
@@ -29,5 +32,19 @@ class WeatherModel {
       weatherStateName: jsonData["condition"]["text"],
       maxTemp: jsonData["maxtemp_c"],
     );
+  }
+  void getImage() {
+    if (matches(weatherStateName!, "rain")) {
+      path = "assets/images/rainy.png";
+    } else if (matches(weatherStateName!, "Sunny")) {
+      path = "assets/images/clear.png";
+    } else if (matches(weatherStateName!, "Cloudy")) {
+      path = "assets/images/cloudy.png";
+    } else if (matches(weatherStateName!, "Snow")) {
+      path = "assets/images/snow.png";
+    } else if (matches(weatherStateName!, "Thunderstorm") ||
+        matches(weatherStateName!, "Thunder")) {
+      path = "assets/images/thunderstorm.png";
+    }
   }
 }

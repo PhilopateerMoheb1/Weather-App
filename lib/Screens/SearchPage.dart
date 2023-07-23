@@ -7,11 +7,10 @@ import 'package:weatherapp/Providers/weatherProvider.dart';
 import 'package:weatherapp/Services/WeatherService.dart';
 
 class SearchScreen extends StatelessWidget {
-  VoidCallback? updateUI;
   String? cityName;
   WeatherModel? weatherModel;
 
-  SearchScreen({super.key, this.updateUI});
+  SearchScreen({super.key});
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -29,8 +28,8 @@ class SearchScreen extends StatelessWidget {
               WeatherService service = WeatherService();
               weatherModel = await service.getWeather(
                   CityName: cityName!, serviceName: "forecast");
-              Provider.of<WeatherProvider?>(context, listen: false)
-                  ?.weatherData = weatherModel;
+              Provider.of<WeatherProvider>(context, listen: false).weatherData =
+                  weatherModel;
               Navigator.pop(context);
             },
             decoration: const InputDecoration(

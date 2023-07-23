@@ -14,28 +14,13 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  void updateUI() {
-    setState(() {});
-  }
-
   WeatherModel? weatherModel;
 
   @override
   Widget build(BuildContext context) {
-    // Image? image;
+    // ? image;
     weatherModel = Provider.of<WeatherProvider?>(context)?.weatherData;
-
-    // if (state.contains("rain")) {
-    //   image = Image.asset("assets/images/rainy.png");
-    // } else if (state.contains("sun")) {
-    //   image = Image.asset("assets/images/clear.png");
-    // } else if (state.contains("cloud")) {
-    //   image = Image.asset("assets/images/cloudy.png");
-    // } else if (state.contains("snow")) {
-    //   image = Image.asset("assets/images/snow.png");
-    // } else if (state.contains("storm")) {
-    //   image = Image.asset("assets/images/thunderstorm.png");
-    // }
+    weatherModel?.getImage();
 
     return Scaffold(
       appBar: AppBar(
@@ -43,9 +28,7 @@ class _HomePageState extends State<HomePage> {
           IconButton(
             onPressed: () {
               Navigator.push(context, MaterialPageRoute(builder: (context) {
-                return SearchScreen(
-                  updateUI: updateUI,
-                );
+                return SearchScreen();
               }));
             },
             icon: const Icon(Icons.search),
@@ -93,7 +76,8 @@ class _HomePageState extends State<HomePage> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      Image.asset("assets/images/snow.png"),
+                      Image.asset(
+                          weatherModel?.path ?? "assets/images/snow.png"),
                       Text(
                         "${weatherModel!.avgTemp!.toInt()}",
                         style: const TextStyle(

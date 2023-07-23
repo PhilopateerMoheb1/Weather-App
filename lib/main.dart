@@ -10,14 +10,12 @@ void main() {
 class WeatherApp extends StatelessWidget {
   WeatherApp({super.key});
 
-  WeatherProvider? weatherProvider;
-
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
       create: (BuildContext context) {
-        return weatherProvider;
+        return WeatherProvider();
       },
       child: MaterialApp(
         home: HomePage(),
