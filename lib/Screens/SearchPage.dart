@@ -1,10 +1,17 @@
-// ignore_for_file: file_names, avoid_print
+// ignore_for_file: file_names, avoid_print, use_build_context_synchronously
 
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:weatherapp/Models/WeatherModel.dart';
+import 'package:weatherapp/Providers/weatherProvider.dart';
+import 'package:weatherapp/Services/WeatherService.dart';
 
 class SearchScreen extends StatelessWidget {
-  String? CityName;
+  VoidCallback? updateUI;
+  String? cityName;
+  WeatherModel? weatherModel;
 
+  SearchScreen({super.key, this.updateUI});
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -17,8 +24,14 @@ class SearchScreen extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16.0),
           child: TextField(
-            onSubmitted: (data) {
-              CityName = data;
+            onSubmitted: (data) async {
+              cityName = data;
+              WeatherService service = WeatherService();
+              weatherModel = await service.getWeather(
+                  CityName: cityName!, serviceName: "forecast");
+              Provider.of<WeatherProvider?>(context, listen: false)
+                  ?.weatherData = weatherModel;
+              Navigator.pop(context);
             },
             decoration: const InputDecoration(
               contentPadding: EdgeInsets.symmetric(

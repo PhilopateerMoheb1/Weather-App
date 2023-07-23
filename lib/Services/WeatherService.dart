@@ -1,12 +1,22 @@
-// ignore_for_file: non_constant_identifier_names
+// ignore_for_file: non_constant_identifier_names, file_names
+
+import 'dart:convert';
 
 import 'package:http/http.dart' as http;
+import 'package:weatherapp/Models/WeatherModel.dart';
 
 class WeatherService {
-  Future<http.Response> getWeather({required String CityName}) async {
-    Uri url = Uri.parse(
-        "http://api.weatherapi.com/v1/current.json?key=9938b8f80a29407f973141629231607&q=$CityName&aqi=no");
+  String baseUrl = "http://api.weatherapi.com/v1";
+  String key = "9938b8f80a29407f973141629231607";
+  Future<WeatherModel> getWeather({
+    required String CityName,
+    required String serviceName,
+  }) async {
+    Uri url =
+        Uri.parse("$baseUrl/$serviceName.json?key=$key&q=$CityName&aqi=no");
     http.Response response = await http.get(url);
-    return response;
+    Map<String, dynamic> data = jsonDecode(response.body);
+    WeatherModel weatherModel = WeatherModel.fromJson(data, CityName);
+    return weatherModel;
   }
 }
