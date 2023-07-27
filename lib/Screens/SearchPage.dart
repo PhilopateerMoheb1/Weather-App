@@ -1,4 +1,4 @@
-// ignore_for_file: file_names, avoid_print, use_build_context_synchronously
+// ignore_for_file: file_names, avoid_print, use_build_context_synchronously, must_be_immutable
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -23,25 +23,36 @@ class SearchScreen extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16.0),
           child: TextField(
+            onChanged: (data) {
+              cityName = data;
+            },
             onSubmitted: (data) async {
               cityName = data;
               WeatherService service = WeatherService();
               weatherModel = await service.getWeather(
-                  CityName: cityName!, serviceName: "forecast");
+                  cityName: cityName!, serviceName: "forecast");
               Provider.of<WeatherProvider>(context, listen: false).weatherData =
                   weatherModel;
               Navigator.pop(context);
             },
-            decoration: const InputDecoration(
-              contentPadding: EdgeInsets.symmetric(
+            decoration: InputDecoration(
+              contentPadding: const EdgeInsets.symmetric(
                 vertical: 35,
                 horizontal: 24,
               ),
-              suffixIcon: Icon(
-                Icons.search,
+              suffixIcon: IconButton(
+                icon: const Icon(Icons.search),
+                onPressed: () async {
+                  WeatherService service = WeatherService();
+                  weatherModel = await service.getWeather(
+                      cityName: cityName!, serviceName: "forecast");
+                  Provider.of<WeatherProvider>(context, listen: false)
+                      .weatherData = weatherModel;
+                  Navigator.pop(context);
+                },
               ),
-              label: Text("Search"),
-              border: OutlineInputBorder(),
+              label: const Text("Search"),
+              border: const OutlineInputBorder(),
               hintText: "Enter a City",
             ),
             showCursor: true,

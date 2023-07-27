@@ -8,15 +8,20 @@ import 'package:weatherapp/Models/WeatherModel.dart';
 class WeatherService {
   String baseUrl = "http://api.weatherapi.com/v1";
   String key = "9938b8f80a29407f973141629231607";
-  Future<WeatherModel> getWeather({
-    required String CityName,
+  Future<WeatherModel?> getWeather({
+    required String cityName,
     required String serviceName,
   }) async {
-    Uri url =
-        Uri.parse("$baseUrl/$serviceName.json?key=$key&q=$CityName&aqi=no");
-    http.Response response = await http.get(url);
-    Map<String, dynamic> data = jsonDecode(response.body);
-    WeatherModel weatherModel = WeatherModel.fromJson(data, CityName);
+    WeatherModel? weatherModel;
+    try {
+      Uri url =
+          Uri.parse("$baseUrl/$serviceName.json?key=$key&q=$cityName&aqi=no");
+      http.Response response = await http.get(url);
+      Map<String, dynamic> data = jsonDecode(response.body);
+      weatherModel = WeatherModel.fromJson(data, cityName);
+    } catch (e) {
+      print(e);
+    }
     return weatherModel;
   }
 }
